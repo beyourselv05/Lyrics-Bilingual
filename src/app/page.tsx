@@ -105,12 +105,20 @@ export default function HomePage() {
         ))}
       </ul>
 
-      <Link
-        href="/library"
-        className="mt-auto text-center text-sm text-neutral-500 underline underline-offset-4 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-50"
-      >
-        저장한 곡 보기
-      </Link>
+      <div className="mt-auto flex justify-center gap-4 text-sm">
+        <Link
+          href="/now-playing"
+          className="text-neutral-500 underline underline-offset-4 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-50"
+        >
+          지금 재생 중
+        </Link>
+        <Link
+          href="/library"
+          className="text-neutral-500 underline underline-offset-4 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-50"
+        >
+          저장한 곡 보기
+        </Link>
+      </div>
     </main>
   );
 }
