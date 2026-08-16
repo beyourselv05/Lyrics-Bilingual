@@ -32,7 +32,7 @@ export async function searchGenius(
   const hits: { result: GeniusSongResult }[] = data.response.hits;
 
   return hits
-    .filter((hit) => hit.result)
+    .filter((hit) => hit.result && !hit.result.primary_artist.name.startsWith("Genius "))
     .map((hit) => ({
       id: String(hit.result.id),
       title: hit.result.title,
@@ -71,6 +71,7 @@ export async function scrapeGeniusLyrics(url: string): Promise<string> {
   const parts: string[] = [];
   $('div[data-lyrics-container="true"]').each((_, el) => {
     const $el = $(el);
+    $el.find('[data-exclude-from-selection="true"]').remove();
     $el.find("br").replaceWith("\n");
     parts.push($el.text());
   });

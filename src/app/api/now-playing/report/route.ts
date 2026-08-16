@@ -11,6 +11,6 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "title, artist가 필요합니다" }, { status: 400 });
   }
 
-  setReportedTrack(title, artist);
+  await setReportedTrack(title, artist);
   return NextResponse.json({ ok: true });
 }

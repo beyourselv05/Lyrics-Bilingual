@@ -4,6 +4,7 @@ import { useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
+import { NowPlayingWidget } from "@/components/NowPlayingWidget";
 
 type SearchResult = {
   id: string;
@@ -47,30 +48,52 @@ export default function HomePage() {
 
   return (
     <main className="mx-auto flex min-h-screen max-w-2xl flex-col gap-8 px-6 py-16">
-      <header className="space-y-2 text-center">
-        <h1 className="text-3xl font-semibold tracking-tight text-neutral-900 dark:text-neutral-50">
-          Lyrics Bilingual
-        </h1>
-        <p className="text-sm text-neutral-500 dark:text-neutral-400">
-          영어 원문과 한국어 가사를 동시에
-        </p>
-      </header>
+      <header className="flex flex-wrap items-start justify-between gap-4">
+        <div className="space-y-2">
+          <h1 className="text-2xl font-semibold tracking-tight text-neutral-900 dark:text-neutral-50">
+            Lyrics Bilingual
+          </h1>
+          <p className="flex items-center gap-1.5 text-sm text-neutral-500 dark:text-neutral-400">
+            영어 원문과 한국어 가사를 동시에
+            <span
+              aria-label="영어 가사와 한국어를 선택적으로 보고 좋아하는 노래를 들으며 영어 공부를 해보세요!!"
+              className="group relative inline-flex cursor-help"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+                className="h-4 w-4 text-neutral-400 dark:text-neutral-500"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M18 10A8 8 0 1 1 2 10a8 8 0 0 1 16 0ZM9 9a1 1 0 0 1 2 0v4a1 1 0 1 1-2 0V9Zm1-4a1.25 1.25 0 1 0 0 2.5A1.25 1.25 0 0 0 10 5Z"
+                  clipRule="evenodd"
+                />
+              </svg>
+              <span className="pointer-events-none absolute top-full left-1/2 z-20 mt-2 w-64 -translate-x-1/2 rounded-md bg-neutral-900 px-3 py-2 text-xs font-normal text-neutral-50 opacity-0 shadow-lg group-hover:opacity-100 dark:bg-neutral-100 dark:text-neutral-900">
+                영어 가사와 한국어를 선택적으로 보고 좋아하는 노래를 들으며 영어 공부를 해보세요!!
+              </span>
+            </span>
+          </p>
+        </div>
 
-      <form onSubmit={handleSearch} className="flex gap-2">
-        <input
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          placeholder="아티스트, 곡 제목, 또는 URL"
-          className="flex-1 rounded-md border border-neutral-300 bg-white px-4 py-2 text-neutral-900 placeholder:text-neutral-400 focus:ring-2 focus:ring-neutral-900 focus:outline-none dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-50"
-        />
-        <button
-          type="submit"
-          disabled={loading}
-          className="rounded-md bg-neutral-900 px-5 py-2 font-medium text-neutral-50 transition hover:bg-neutral-700 disabled:opacity-50 dark:bg-neutral-50 dark:text-neutral-900 dark:hover:bg-neutral-200"
-        >
-          {loading ? "검색 중…" : "검색"}
-        </button>
-      </form>
+        <form onSubmit={handleSearch} className="flex gap-2">
+          <input
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="아티스트, 곡 제목, 또는 URL"
+            className="w-40 rounded-md border border-neutral-300 bg-white px-4 py-2 text-neutral-900 placeholder:text-neutral-400 focus:ring-2 focus:ring-neutral-900 focus:outline-none sm:w-56 dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-50"
+          />
+          <button
+            type="submit"
+            disabled={loading}
+            className="rounded-md bg-neutral-900 px-5 py-2 font-medium text-neutral-50 transition hover:bg-neutral-700 disabled:opacity-50 dark:bg-neutral-50 dark:text-neutral-900 dark:hover:bg-neutral-200"
+          >
+            {loading ? "검색 중…" : "검색"}
+          </button>
+        </form>
+      </header>
 
       {error && <p className="text-sm text-neutral-500 dark:text-neutral-400">{error}</p>}
 
@@ -105,12 +128,7 @@ export default function HomePage() {
         ))}
       </ul>
 
-      <Link
-        href="/now-playing"
-        className="mt-auto text-center text-sm text-neutral-500 underline underline-offset-4 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-50"
-      >
-        지금 재생 중
-      </Link>
+      <NowPlayingWidget />
     </main>
   );
 }

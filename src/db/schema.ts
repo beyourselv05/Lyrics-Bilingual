@@ -15,3 +15,10 @@ export const songs = pgTable("songs", {
   createdAt: timestamp("created_at").defaultNow().notNull(),
   lastViewedAt: timestamp("last_viewed_at").defaultNow().notNull(),
 });
+
+export const nowPlaying = pgTable("now_playing", {
+  id: text("id").primaryKey(),
+  title: text("title").notNull(),
+  artist: text("artist").notNull(),
+  reportedAt: timestamp("reported_at").notNull(),
+});

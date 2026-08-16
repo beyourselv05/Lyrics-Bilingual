@@ -25,6 +25,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     >
       <body className="flex min-h-full flex-col bg-neutral-50 dark:bg-neutral-950">
         {children}
+        <footer className="py-6 text-center text-xs text-neutral-400 dark:text-neutral-600">
+          Contact : beyourselv05@gmail.com
+        </footer>
       </body>
     </html>
   );
