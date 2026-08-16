@@ -1,19 +1,26 @@
 import type { LyricLine } from "@/db/schema";
 
-const MYMEMORY_API = "https://api.mymemory.translated.net/get";
+const GOOGLE_TRANSLATE_API = "https://translate.googleapis.com/translate_a/single";
 const CONCURRENCY = 5;
 
 async function translateLine(line: string): Promise<string> {
   try {
-    const params = new URLSearchParams({ q: line, langpair: "en|ko" });
-    if (process.env.MYMEMORY_EMAIL) params.set("de", process.env.MYMEMORY_EMAIL);
+    const params = new URLSearchParams({
+      client: "gtx",
+      sl: "en",
+      tl: "ko",
+      dt: "t",
+      q: line,
+    });
 
-    const res = await fetch(`${MYMEMORY_API}?${params}`);
+    const res = await fetch(`${GOOGLE_TRANSLATE_API}?${params}`);
     if (!res.ok) return "";
 
     const data = await res.json();
-    if (data.responseStatus && data.responseStatus !== 200) return "";
-    return data.responseData?.translatedText ?? "";
+    const segments = data?.[0];
+    if (!Array.isArray(segments)) return "";
+
+    return segments.map((segment: [string]) => segment[0]).join("");
   } catch {
     return "";
   }
