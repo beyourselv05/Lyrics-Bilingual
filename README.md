@@ -1,6 +1,6 @@
 <img width="2510" height="2155" alt="image" src="https://github.com/user-attachments/assets/6f05ecf0-62ae-496e-8866-599a2e45db38" />
 
-#https://lyrics-bilingual.vercel.app/
+https://lyrics-bilingual.vercel.app/
 # Lyrics Bilingual
 
 영어 노래 가사와 한국어 번역을 나란히 보여주는 개인용 뷰어입니다. 곡을 검색하면 Genius에서 원문 가사를 가져와 줄 단위로 한국어 번역을 붙여서 보여줍니다.
