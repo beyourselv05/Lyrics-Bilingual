@@ -16,7 +16,23 @@ type GeniusSongResult = {
 };
 
 function authHeaders() {
-  return { Authorization: `Bearer ${process.env.GENIUS_ACCESS_TOKEN}` };
+  const token = process.env.GENIUS_ACCESS_TOKEN;
+  if (!token) {
+    throw new Error(
+      "GENIUS_ACCESS_TOKEN 환경변수가 설정되지 않았습니다 (로컬은 .env.local, 배포는 Vercel 환경변수)",
+    );
+  }
+  return { Authorization: `Bearer ${token}` };
+}
+
+// Genius 응답 실패 시 상태 코드를 남겨서 원인(인증/한도/장애)을 구분할 수 있게 한다.
+async function geniusError(message: string, res: Response) {
+  const detail = await res.text().catch(() => "");
+  const hint =
+    res.status === 401 || res.status === 403
+      ? " — 토큰이 잘못되었거나 만료되었습니다"
+      : "";
+  return `${message} (HTTP ${res.status}${hint}) ${detail.slice(0, 200)}`.trim();
 }
 
 export async function searchGenius(
@@ -26,7 +42,7 @@ export async function searchGenius(
     `${GENIUS_API_BASE}/search?q=${encodeURIComponent(query)}`,
     { headers: authHeaders() },
   );
-  if (!res.ok) throw new Error("Genius 검색에 실패했습니다");
+  if (!res.ok) throw new Error(await geniusError("Genius 검색에 실패했습니다", res));
 
   const data = await res.json();
   const hits: { result: GeniusSongResult }[] = data.response.hits;
@@ -45,7 +61,7 @@ export async function getGeniusSongById(geniusId: string) {
   const res = await fetch(`${GENIUS_API_BASE}/songs/${geniusId}`, {
     headers: authHeaders(),
   });
-  if (!res.ok) throw new Error("곡 정보를 가져오지 못했습니다");
+  if (!res.ok) throw new Error(await geniusError("곡 정보를 가져오지 못했습니다", res));
 
   const data = await res.json();
   const song: GeniusSongResult = data.response.song;
